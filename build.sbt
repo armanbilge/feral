@@ -33,6 +33,10 @@ enablePlugins(SonatypeCiReleasePlugin)
 ThisBuild / spiewakCiReleaseSnapshots := true
 ThisBuild / spiewakMainBranches := Seq("series/armanbilge")
 sonatypeCredentialHost := "s01.oss.sonatype.org"
+ThisBuild / homepage := Some(url("https://github.com/armanbilge/feral"))
+
+ThisBuild / scmInfo := Some(
+  ScmInfo(url("https://github.com/armanbilge/feral"), "git@github.com:armanbilge/feral.git"))
 
 replaceCommandAlias(
   "ci",
