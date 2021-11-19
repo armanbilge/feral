@@ -31,7 +31,7 @@ ThisBuild / developers := List(
 
 enablePlugins(SonatypeCiReleasePlugin)
 ThisBuild / spiewakCiReleaseSnapshots := true
-ThisBuild / spiewakMainBranches := Seq("series/armanbilge")
+ThisBuild / spiewakMainBranches := Seq("series/armanbilge-tracing")
 sonatypeCredentialHost := "s01.oss.sonatype.org"
 ThisBuild / homepage := Some(url("https://github.com/armanbilge/feral"))
 
@@ -120,7 +120,8 @@ lazy val lambdaNatchez = crossProject(JSPlatform, JVMPlatform)
     name := "feral-lambda-natchez",
     libraryDependencies ++= Seq(
       "org.tpolecat" %%% "natchez-core" % natchezVersion
-    )
+    ),
+    sonatypeCredentialHost := "s01.oss.sonatype.org"
   )
   .dependsOn(lambda, lambdaEvents)
 
