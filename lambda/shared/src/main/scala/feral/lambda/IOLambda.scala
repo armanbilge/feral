@@ -18,8 +18,10 @@ package feral
 package lambda
 
 import cats.effect.IO
-import io.circe.Decoder
-import io.circe.Encoder
+import cats.effect.kernel.Resource
+import io.circe.{Decoder, Encoder}
+
+import scala.annotation.nowarn
 
 abstract class IOLambda[Event, Result](
     implicit private[lambda] val decoder: Decoder[Event],
@@ -27,5 +29,22 @@ abstract class IOLambda[Event, Result](
 ) extends IOLambdaPlatform[Event, Result]
     with IOSetup {
 
-  def apply(event: Event, context: Context, setup: Setup): IO[Option[Result]]
+  final type Setup = Lambda[IO, Event, Result]
+
+  final override protected def setup: Resource[IO, Setup] = run
+
+  def run: Resource[IO, Lambda[IO, Event, Result]]
+
+}
+
+object IOLambda {
+
+  /**
+   * This can't actually be used. It's here because `IOLambda` demands an Encoder for its result
+   * type, which should be `Nothing` when no output is desired. Userland code will return an
+   * `Option[Nothing]` which is only inhabited by `None`, and the encoder is only used when the
+   * userland code returns `Some`.
+   */
+  @nowarn("msg=dead code following this construct")
+  implicit val nothingEncoder: Encoder[INothing] = (_: INothing) => ???
 }

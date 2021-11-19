@@ -21,7 +21,7 @@ ThisBuild / baseVersion := "0.1"
 ThisBuild / organization := "com.armanbilge"
 ThisBuild / organizationName := "Typelevel"
 
-ThisBuild / crossScalaVersions := Seq("3.1.0", "2.12.15", "2.13.6")
+ThisBuild / crossScalaVersions := Seq("3.1.0", "2.12.15", "2.13.7")
 
 ThisBuild / developers := List(
   Developer("armanbilge", "Arman Bilge", "@armanbilge", url("https://github.com/armanbilge")),
@@ -47,6 +47,7 @@ val catsEffectVersion = "3.2.9"
 val circeVersion = "0.14.1"
 val fs2Version = "3.2.2"
 val http4sVersion = "0.23.6"
+val natchezVersion = "0.1.5"
 
 lazy val root =
   project
@@ -54,14 +55,16 @@ lazy val root =
     .aggregate(
       core.js,
       core.jvm,
-      lambdaCloudFormationCustomResource.js,
-      lambdaCloudFormationCustomResource.jvm,
       lambda.js,
       lambda.jvm,
       lambdaEvents.js,
       lambdaEvents.jvm,
+      lambdaNatchez.js,
+      lambdaNatchez.jvm,
       lambdaApiGatewayProxyHttp4s.js,
-      lambdaApiGatewayProxyHttp4s.jvm
+      lambdaApiGatewayProxyHttp4s.jvm,
+      lambdaCloudFormationCustomResource.js,
+      lambdaCloudFormationCustomResource.jvm
     )
     .enablePlugins(NoPublishPlugin)
 
@@ -109,6 +112,17 @@ lazy val lambdaEvents = crossProject(JSPlatform, JVMPlatform)
     ),
     sonatypeCredentialHost := "s01.oss.sonatype.org"
   )
+
+lazy val lambdaNatchez = crossProject(JSPlatform, JVMPlatform)
+  .crossType(CrossType.Pure)
+  .in(file("lambda-natchez"))
+  .settings(
+    name := "feral-lambda-natchez",
+    libraryDependencies ++= Seq(
+      "org.tpolecat" %%% "natchez-core" % natchezVersion
+    )
+  )
+  .dependsOn(lambda, lambdaEvents)
 
 lazy val lambdaApiGatewayProxyHttp4s = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
