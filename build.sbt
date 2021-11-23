@@ -31,7 +31,7 @@ ThisBuild / developers := List(
 
 enablePlugins(SonatypeCiReleasePlugin)
 ThisBuild / spiewakCiReleaseSnapshots := true
-ThisBuild / spiewakMainBranches := Seq("series/armanbilge")
+ThisBuild / spiewakMainBranches := Seq("series/armanbilge-mtl")
 sonatypeCredentialHost := "s01.oss.sonatype.org"
 ThisBuild / homepage := Some(url("https://github.com/armanbilge/feral"))
 
