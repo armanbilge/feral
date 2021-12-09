@@ -62,7 +62,7 @@ object IOLambda {
       } yield result
     }
 
-    def handle(event: Event, context: Context[IO], init: Init): IO[Option[Result]] = ???
+    def handle(event: Event, context: Context[IO], init: Init): IO[Option[Result]]
   }
 
 }
