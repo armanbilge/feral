@@ -27,6 +27,7 @@ private[lambda] trait IOLambdaPlatform[Event, Result] {
   this: IOLambda[Event, Result] =>
 
   def main(args: Array[String]): Unit = {
+    val handlerName = getClass.getSimpleName.init
     js.Dynamic.global.exports.updateDynamic(handlerName)(handlerFn)
   }
 

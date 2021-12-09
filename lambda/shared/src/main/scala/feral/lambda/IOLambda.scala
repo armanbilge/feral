@@ -23,7 +23,7 @@ import cats.effect.kernel.Resource
 import io.circe.Decoder
 import io.circe.Encoder
 
-abstract class IOLambda[Event, Result](private[lambda] val handlerName: String)(
+abstract class IOLambda[Event, Result](
     implicit private[lambda] val decoder: Decoder[Event],
     private[lambda] val encoder: Encoder[Result]
 ) extends IOLambdaPlatform[Event, Result]

@@ -22,7 +22,7 @@ import feral.lambda.INothing
 import feral.lambda.IOLambda
 import feral.lambda.LambdaEnv
 
-object ExampleLambda extends IOLambda[Unit, INothing]("myhandler") {
+object myLambda extends IOLambda[Unit, INothing] {
 
   def handler: Resource[IO, LambdaEnv[IO, Unit] => IO[Option[INothing]]] =
     Resource.pure(_ => IO.none)
