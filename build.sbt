@@ -64,6 +64,8 @@ lazy val root =
       core.jvm,
       lambda.js,
       lambda.jvm,
+      lambdaExample.js,
+      lambdaExample.jvm,
       lambdaEvents.js,
       lambdaEvents.jvm,
       lambdaNatchez.js,
@@ -106,6 +108,18 @@ lazy val lambda = crossProject(JSPlatform, JVMPlatform)
     )
   )
   .dependsOn(core)
+
+lazy val lambdaExample = crossProject(JSPlatform, JVMPlatform)
+  .crossType(CrossType.Pure)
+  .in(file("lambda-example"))
+  .enablePlugins(NoPublishPlugin)
+  .settings(
+    name := "feral-lambda-example"
+  )
+  .jsSettings(
+    scalaJSUseMainModuleInitializer := true
+  )
+  .dependsOn(lambda)
 
 lazy val lambdaEvents = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
