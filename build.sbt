@@ -82,7 +82,9 @@ lazy val root =
       lambdaApiGatewayProxyHttp4s.js,
       lambdaApiGatewayProxyHttp4s.jvm,
       lambdaCloudFormationCustomResource.js,
-      lambdaCloudFormationCustomResource.jvm
+      lambdaCloudFormationCustomResource.jvm,
+      lambdaDynamoDBStream.js,
+      lambdaDynamoDBStream.jvm,
     )
     .enablePlugins(NoPublishPlugin)
 
@@ -186,3 +188,15 @@ lazy val lambdaCloudFormationCustomResource = crossProject(JSPlatform, JVMPlatfo
     sonatypeCredentialHost := "s01.oss.sonatype.org"
   )
   .dependsOn(lambda)
+
+lazy val lambdaDynamoDBStream = crossProject(JSPlatform, JVMPlatform)
+  .crossType(CrossType.Pure)
+  .in(file("lambda-dynamodb-stream"))
+  .settings(
+    name := "feral-lambda-dynamodb-stream",
+    libraryDependencies ++= Seq(
+      "co.fs2" %%% "fs2-core" % fs2Version
+    ),
+    sonatypeCredentialHost := "s01.oss.sonatype.org"
+  )
+  .dependsOn(lambda, lambdaEvents)
