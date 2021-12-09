@@ -16,9 +16,9 @@
 
 name := "feral"
 
-ThisBuild / baseVersion := "0.1"
+ThisBuild / baseVersion := "0.0"
 
-ThisBuild / organization := "org.typelevel"
+ThisBuild / organization := "com.armanbilge"
 ThisBuild / organizationName := "Typelevel"
 
 ThisBuild / crossScalaVersions := Seq("3.1.0", "2.13.7")
@@ -28,6 +28,15 @@ ThisBuild / developers := List(
   Developer("bpholt", "Brian Holt", "@bpholt", url("https://github.com/bpholt")),
   Developer("djspiewak", "Daniel Spiewak", "@djspiewak", url("https://github.com/djspiewak"))
 )
+
+enablePlugins(SonatypeCiReleasePlugin)
+ThisBuild / spiewakCiReleaseSnapshots := true
+ThisBuild / spiewakMainBranches := Seq("dev")
+sonatypeCredentialHost := "s01.oss.sonatype.org"
+ThisBuild / homepage := Some(url("https://github.com/armanbilge/feral"))
+
+ThisBuild / scmInfo := Some(
+  ScmInfo(url("https://github.com/armanbilge/feral"), "git@github.com:armanbilge/feral.git"))
 
 ThisBuild / githubWorkflowJavaVersions := List("corretto@8", "corretto@11")
 ThisBuild / githubWorkflowEnv += ("JABBA_INDEX" -> "https://github.com/typelevel/jdk-index/raw/main/index.json")
@@ -84,7 +93,8 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
     name := "feral-core",
     libraryDependencies ++= Seq(
       "org.typelevel" %%% "cats-effect" % catsEffectVersion
-    )
+    ),
+    sonatypeCredentialHost := "s01.oss.sonatype.org"
   )
 
 lazy val lambda = crossProject(JSPlatform, JVMPlatform)
@@ -93,7 +103,8 @@ lazy val lambda = crossProject(JSPlatform, JVMPlatform)
     name := "feral-lambda",
     libraryDependencies ++= Seq(
       "io.circe" %%% "circe-core" % circeVersion
-    )
+    ),
+    sonatypeCredentialHost := "s01.oss.sonatype.org"
   )
   .jsSettings(
     libraryDependencies ++= Seq(
@@ -114,7 +125,8 @@ lazy val lambdaExample = crossProject(JSPlatform, JVMPlatform)
   .in(file("lambda-example"))
   .enablePlugins(NoPublishPlugin)
   .settings(
-    name := "feral-lambda-example"
+    name := "feral-lambda-example",
+    sonatypeCredentialHost := "s01.oss.sonatype.org"
   )
   .jsSettings(
     scalaJSUseMainModuleInitializer := true
@@ -128,7 +140,8 @@ lazy val lambdaEvents = crossProject(JSPlatform, JVMPlatform)
     name := "feral-lambda-events",
     libraryDependencies ++= Seq(
       "io.circe" %%% "circe-generic" % circeVersion
-    )
+    ),
+    sonatypeCredentialHost := "s01.oss.sonatype.org"
   )
 
 lazy val lambdaNatchez = crossProject(JSPlatform, JVMPlatform)
@@ -138,7 +151,8 @@ lazy val lambdaNatchez = crossProject(JSPlatform, JVMPlatform)
     name := "feral-lambda-natchez",
     libraryDependencies ++= Seq(
       "org.tpolecat" %%% "natchez-core" % natchezVersion
-    )
+    ),
+    sonatypeCredentialHost := "s01.oss.sonatype.org"
   )
   .dependsOn(lambda, lambdaEvents)
 
@@ -149,7 +163,8 @@ lazy val lambdaApiGatewayProxyHttp4s = crossProject(JSPlatform, JVMPlatform)
     name := "feral-lambda-api-gateway-proxy-http4s",
     libraryDependencies ++= Seq(
       "org.http4s" %%% "http4s-core" % http4sVersion
-    )
+    ),
+    sonatypeCredentialHost := "s01.oss.sonatype.org"
   )
   .dependsOn(lambda, lambdaEvents)
 
@@ -167,6 +182,7 @@ lazy val lambdaCloudFormationCustomResource = crossProject(JSPlatform, JVMPlatfo
       "io.circe" %%% "circe-generic" % circeVersion,
       "org.http4s" %%% "http4s-ember-client" % http4sVersion,
       "org.http4s" %%% "http4s-circe" % http4sVersion
-    )
+    ),
+    sonatypeCredentialHost := "s01.oss.sonatype.org"
   )
   .dependsOn(lambda)
