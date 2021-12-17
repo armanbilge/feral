@@ -1,4 +1,6 @@
 > npmPackage
 $ exists target/scala-2.13/npm-package/index.js
+$ exists target/scala-2.13/npm-package/index.js.map
 $ exists target/scala-2.13/npm-package/package.json
+-$ exists target/scala-2.13/npm-package/README.md
 $ exec node test-export.js

@@ -179,10 +179,12 @@ lazy val sbtLambda = project
   .in(file("sbt-lambda"))
   .enablePlugins(SbtPlugin, BuildInfoPlugin)
   .settings(
+    resolvers +=
+      "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
     name := "sbt-feral-lambda",
     crossScalaVersions := Seq(Scala212),
     addSbtPlugin("org.scala-js" % "sbt-scalajs" % scalaJSVersion),
-    addSbtPlugin("io.chrisdavenport" %% "sbt-npm-package" % "0.0.5"),
+    addSbtPlugin("io.chrisdavenport" %% "sbt-npm-package" % "0.0.5+12-d3c4f780-SNAPSHOT"),
     buildInfoPackage := "feral.lambda.sbt",
     buildInfoKeys += organization,
     scriptedLaunchOpts := {
