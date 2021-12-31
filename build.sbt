@@ -96,6 +96,8 @@ val circeVersion = "0.14.1"
 val fs2Version = "3.2.4"
 val http4sVersion = "0.23.7"
 val natchezVersion = "0.1.6"
+val scalaJavaTimeVersion = "2.3.0"
+val scodecBitsVersion = "1.1.30"
 val munitVersion = "0.7.29"
 val munitCEVersion = "1.0.7"
 
@@ -145,9 +147,9 @@ lazy val lambda = crossProject(JSPlatform, JVMPlatform)
     libraryDependencies ++= Seq(
       "org.tpolecat" %%% "natchez-core" % natchezVersion,
       "io.circe" %%% "circe-scodec" % circeVersion,
-      "org.scodec" %%% "scodec-bits" % "1.1.30",
+      "org.scodec" %%% "scodec-bits" % scodecBitsVersion,
       "org.scalameta" %%% "munit-scalacheck" % munitVersion % Test,
-      "org.typelevel" %%% "munit-cats-effect-3" % "1.0.7" % Test
+      "org.typelevel" %%% "munit-cats-effect-3" % munitCEVersion % Test
     ),
     libraryDependencies ++= {
       if (isDotty.value) Nil
@@ -162,7 +164,7 @@ lazy val lambda = crossProject(JSPlatform, JVMPlatform)
   .jsSettings(
     libraryDependencies ++= Seq(
       "io.circe" %%% "circe-scalajs" % circeVersion,
-      "io.github.cquiroz" %%% "scala-java-time" % "2.3.0"
+      "io.github.cquiroz" %%% "scala-java-time" % scalaJavaTimeVersion
     )
   )
   .jvmSettings(
@@ -219,6 +221,40 @@ lazy val lambdaCloudFormationCustomResource = crossProject(JSPlatform, JVMPlatfo
   )
   .settings(commonSettings)
   .dependsOn(lambda)
+
+lazy val cloudFunctionsBackground = crossProject(JSPlatform, JVMPlatform)
+  .in(file("cloud-functions-background"))
+  .settings(
+    name := "feral-cloud-functions-background",
+    libraryDependencies ++= Seq(
+      "org.tpolecat" %%% "natchez-core" % natchezVersion,
+      "io.circe" %%% "circe-parser" % circeVersion,
+      "io.circe" %%% "circe-scodec" % circeVersion,
+      "org.scodec" %%% "scodec-bits" % scodecBitsVersion,
+      "org.scalameta" %%% "munit-scalacheck" % munitVersion % Test,
+      "org.typelevel" %%% "munit-cats-effect-3" % munitCEVersion % Test
+    ),
+    libraryDependencies ++= {
+      if (isDotty.value) Nil
+      else
+        Seq(
+          "io.circe" %%% "circe-literal" % circeVersion % Test,
+          "io.circe" %% "circe-jawn" % circeVersion % Test // %% b/c used for literal macro at compile-time only
+        )
+    }
+  )
+  .settings(commonSettings)
+  .jsSettings(
+    libraryDependencies ++= Seq(
+      "io.github.cquiroz" %%% "scala-java-time" % scalaJavaTimeVersion
+    )
+  )
+  .jvmSettings(
+    libraryDependencies ++= Seq(
+      "com.google.cloud.functions" % "functions-framework-api" % "1.0.4"
+    )
+  )
+  .dependsOn(core)
 
 lazy val examples = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
