@@ -124,6 +124,8 @@ lazy val root =
       lambdaHttp4s.jvm,
       lambdaCloudFormationCustomResource.js,
       lambdaCloudFormationCustomResource.jvm,
+      cloudFunctionsBackground.js,
+      cloudFunctionsBackground.jvm,
       examples.js,
       examples.jvm
     )
