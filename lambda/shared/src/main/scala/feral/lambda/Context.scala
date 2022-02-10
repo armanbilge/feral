@@ -48,18 +48,18 @@ final class Context[F[_]] private[lambda] (
 
 object Context extends ContextCompanionPlatform
 
-final class CognitoIdentity(
+final class CognitoIdentity private[lambda] (
     val identityId: String,
     val identityPoolId: String
 )
 
-final class ClientContext(
+final class ClientContext private[lambda] (
     val client: ClientContextClient,
     val env: ClientContextEnv,
     val custom: JsonObject
 )
 
-final class ClientContextClient(
+final class ClientContextClient private[lambda]  (
     val installationId: String,
     val appTitle: String,
     val appVersionName: String,
@@ -67,7 +67,7 @@ final class ClientContextClient(
     val appPackageName: String
 )
 
-final class ClientContextEnv(
+final class ClientContextEnv private[lambda] (
     val platformVersion: String,
     val platform: String,
     val make: String,
