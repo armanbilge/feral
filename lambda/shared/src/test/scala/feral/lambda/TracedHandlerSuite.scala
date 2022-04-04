@@ -32,11 +32,11 @@ class TracedLambdaSuite {
 
     implicit def env: LambdaEnv[IO, KinesisStreamEvent] = ???
     def ioEntryPoint: EntryPoint[IO] = ???
-    def needsTrace[F[_]: Trace]: F[Option[INothing]] = ???
+    def needsTrace[F[_]: Trace]: F[Option[Nothing]] = ???
 
     TracedHandler(ioEntryPoint) { implicit trace => needsTrace[IO] }
 
-    TracedHandler(ioEntryPoint, Kleisli[IO, Span[IO], Option[INothing]](???))
+    TracedHandler(ioEntryPoint, Kleisli[IO, Span[IO], Option[Nothing]](???))
   }
 
 }

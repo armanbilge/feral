@@ -20,19 +20,5 @@ import io.circe.Encoder
 
 import scala.annotation.nowarn
 
-/**
- * Alias for `Nothing` which works better with type inference. Inspired by fs2, but inlined here
- * to avoid pulling in an otherwise-unnecessary dependency.
- */
-type INothing <: Nothing
-object INothing {
-
-  /**
-   * This can't actually be used. It's here because `IOLambda` demands an Encoder for its result
-   * type, which should be `Nothing` when no output is desired. Userland code will return an
-   * `Option[Nothing]` which is only inhabited by `None`, and the encoder is only used when the
-   * userland code returns `Some`.
-   */
-  @nowarn("msg=dead code following this construct")
-  implicit val nothingEncoder: Encoder[INothing] = identity(_)
-}
+@nowarn("msg=dead code following this construct")
+implicit val nothingEncoder: Encoder[Nothing] = identity(_)

@@ -30,7 +30,7 @@ import skunk.Session
  *
  * Every Lambda is triggered by an `Event` for which there must be a circe `Decoder[Event]`. It
  * should then return `Some[Result]` for which there must be a circe `Encoder[Result]`. If your
- * Lambda has no result (as is often the case), use `INothing` and return `None` in the handler.
+ * Lambda has no result (as is often the case), use `Nothing` and return `None` in the handler.
  *
  * Models for events/results are provided in the `feral.lambda.events` package. There are many
  * more to implement! Please consider contributing to
@@ -38,7 +38,7 @@ import skunk.Session
  *
  * For a more advanced example, see the `Http4sLambda` next.
  */
-object kinesisHandler extends IOLambda.Simple[KinesisStreamEvent, INothing] {
+object kinesisHandler extends IOLambda.Simple[KinesisStreamEvent, Nothing] {
 
   /**
    * Optional initialization section. This is a resource that will be acquired exactly once when
