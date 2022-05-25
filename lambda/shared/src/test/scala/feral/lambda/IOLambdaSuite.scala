@@ -29,9 +29,9 @@ class IOLambdaSuite extends CatsEffectSuite {
       invokeCounter <- IO.ref(0)
       lambda <- IO {
         new IOLambda[String, String] {
-          def handler = Resource
+          def handler(implicit env: LambdaEnv[IO, String]) = Resource
             .eval(allocationCounter.getAndUpdate(_ + 1))
-            .as(_.event.map(Some(_)) <* invokeCounter.getAndUpdate(_ + 1))
+            .as(env.event.map(Some(_)) <* invokeCounter.getAndUpdate(_ + 1))
         }
       }
       handler <- lambda.setupMemo

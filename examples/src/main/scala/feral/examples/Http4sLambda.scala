@@ -50,13 +50,16 @@ object http4sHandler
    * that your Lambda is triggered. This may seem counter-intuitive at first: where does the
    * event come from? Because accessing the event via `LambdaEnv` is now also an effect in `IO`,
    * it becomes a step in your program.
+   *
+   * @param env
+   *   the `LambdaEnv` provides access to the event and context
    */
-  def handler = for {
+  def handler(implicit env: LambdaEnv[IO, ApiGatewayProxyEventV2]) = for {
     entrypoint <- Resource
       .eval(Random.scalaUtilRandom[IO])
       .flatMap(implicit r => XRay.entryPoint[IO]())
     client <- EmberClientBuilder.default[IO].build
-  } yield { implicit env => // the LambdaEnv provides access to the event and context
+  } yield {
 
     // a middleware to add tracing to any handler
     // it extracts the kernel from the event and adds tags derived from the context

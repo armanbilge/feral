@@ -32,14 +32,13 @@ abstract class IOLambda[Event, Result](
 
   final type Setup = (Event, Context[IO]) => IO[Option[Result]]
   final override protected def setup: Resource[IO, Setup] = for {
-    handler <- handler
     localEvent <- IOLocal[Event](null.asInstanceOf[Event]).toResource
     localContext <- IOLocal[Context[IO]](null).toResource
     env = LambdaEnv.ioLambdaEnv(localEvent, localContext)
-    result = handler(env)
+    result <- handler(env)
   } yield { localEvent.set(_) *> localContext.set(_) *> result }
 
-  def handler: Resource[IO, LambdaEnv[IO, Event] => IO[Option[Result]]]
+  def handler(implicit env: LambdaEnv[IO, Event]): Resource[IO, IO[Option[Result]]]
 
 }
 
@@ -53,7 +52,7 @@ object IOLambda {
     type Init
     def init: Resource[IO, Init] = Resource.pure(null.asInstanceOf[Init])
 
-    final def handler = init.map { init => env =>
+    final def handler(implicit env: LambdaEnv[IO, Event]) = init.map { init =>
       for {
         event <- env.event
         ctx <- env.context
