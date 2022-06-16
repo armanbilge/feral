@@ -16,12 +16,18 @@
 
 package feral.lambda
 
+import cats.Show
+import cats.kernel.Hash
+import cats.kernel.Order
 import io.circe.Decoder
 
 import java.time.Instant
 import scala.util.Try
 
 package object events {
+
+  private[events] type HashShow[A] = Hash[A] with Show[A]
+  private[events] type HashOrderShow[A] = Hash[A] with Order[A] with Show[A]
 
   implicit lazy val instantDecoder: Decoder[Instant] =
     Decoder.decodeBigDecimal.emapTry { millis =>
